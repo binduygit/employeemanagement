@@ -1,7 +1,6 @@
 import { Component, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import { PrimeNGConfig } from 'primeng/api';
 import { ApiService } from '.././api.service';
-import * as $ from 'jQuery';
 import { CommonService } from '.././common.service';
 import { CommunicateService } from '.././communicate.service';
 
