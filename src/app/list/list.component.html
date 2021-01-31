@@ -1,0 +1,25 @@
+<div class="container py-5">
+    <h3>Personal Expenses List</h3>
+    <p-table [value]=personalList [columns]="fieldList">
+        <ng-template pTemplate="header" let-columns >
+            <tr>
+                <th *ngFor="let column of fieldList">
+                    {{column.header}}
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData let-columns="columns" >
+            <tr >
+                <td *ngFor="let column of fieldList">
+                    {{rowData[column.field]}}
+                </td>
+                
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="summary" >
+            <div style="text-align:right">
+                <a class="nav-link" href=""> <button type="button" pButton icon="pi pi-plus" label="Add New Expense"></button></a>
+            </div>
+        </ng-template>
+    </p-table>
+    </div>

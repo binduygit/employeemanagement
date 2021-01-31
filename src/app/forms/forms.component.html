@@ -1,0 +1,111 @@
+<div class="container py-5 " background-color="grey">  
+    <div class="card" style="width: 800px; margin: auto;">  
+      <div class="card-header bg-primary text-white">  
+        <h4 class="text-uppercase text-center">Add Expenses</h4>  
+      </div>  
+      <div class="card-body">  
+        <div class="row">  
+          <div class="col-sm-6 col-md-6 col-xs-12">  
+            <div class="form-group">  
+              <label>Expense Type:</label>  
+              <div class="input-group">  
+                <div class="input-group-prepend">  
+                    
+                    <p-dropdown [options]="expenseType" [(ngModel)]="selectExpenseType" optionLabel="name"></p-dropdown> 
+                </div>  
+              </div>  
+            </div>  
+          </div>
+          <div class="col-sm-6 col-md-6 col-xs-12">  
+            <div class="form-group">  
+              <label>Upload (Reciept):</label>  
+              <div class="input-group">  
+                <div class="input-group-prepend">  
+                </div>  
+                <p-fileUpload #fubauto mode="basic" name="demo[]" url="./upload.php" accept="image/*" maxFileSize="1000000"  [auto]="true" chooseLabel="Browse"></p-fileUpload>
+              </div>  
+            </div>  
+          </div>           
+        </div>
+        <div class="row">  
+            <div class="col-sm-6 col-md-6 col-xs-12">  
+              <div class="form-group">  
+                <label>Assignment Type:</label>  
+                <div class="input-group">  
+                  <div class="input-group-prepend"> 
+                  </div>  
+                  <p-dropdown [options]="assignments" [(ngModel)]="selectAssignment" optionLabel="name"></p-dropdown>  
+                </div>  
+              </div>  
+            </div>  
+            <div class="col-sm-6 col-md-6 col-xs-12">  
+              <div class="form-group">  
+                <label>Location:</label>  
+                <div class="input-group">  
+                  <div class="input-group-prepend"> 
+                  </div>  
+                  <p-dropdown [options]="cities" [(ngModel)]="selectedCity1" optionLabel="name"></p-dropdown>  
+                </div>  
+              </div>  
+            </div>  
+          </div>  
+        <div class="row">  
+            <div class="col-sm-6 col-md-6 col-xs-12">  
+              <div class="form-group">  
+                <label>From:</label> 
+                <div class="input-group">  
+                  <div class="input-group-prepend">  
+                    <span class="input-group-text">  
+                      <i class="fa fa-calendar"></i>  
+                    </span>
+                  </div>  
+                  <p-calendar inputId="basic" [(ngModel)]="date1"></p-calendar>
+                </div>
+                                  
+              </div>  
+            </div>  
+            <div class="col-sm-6 col-md-6 col-xs-6">  
+              <div class="form-group">  
+                <label>To:</label> 
+                <div class="input-group">  
+                  <div class="input-group-prepend">  
+                    <span class="input-group-text">  
+                      <i class="fa fa-calendar"></i>  
+                    </span>
+                  </div>
+                  <p-calendar inputId="icon" [(ngModel)]="date2"  ></p-calendar> 
+                </div>             
+              </div> 
+            </div>  
+        </div>  
+        <div class="row">  
+              <div class="col-sm-6 col-md-6 col-xs-12">  
+                <div class="form-group">  
+                  <label>Amount:</label>  
+                  <div class="input-group">  
+                    <div class="input-group-prepend">  
+                    </div>  
+                    <p-inputNumber [(ngModel)]="expensesValue" mode="decimal" [minFractionDigits]="2"></p-inputNumber>
+                  </div>  
+                </div>  
+              </div>  
+              <div class="col-sm-6 col-md-6 col-xs-6">  
+                <div class="form-group">  
+                  <label>Tax (if applicable):</label>  
+                  <div class="input-group">  
+                    <div class="input-group-prepend">
+                    </div>  
+                    <p-inputNumber [(ngModel)]="expensesTax" mode="decimal" [minFractionDigits]="2"></p-inputNumber>
+                  </div>  
+                </div>  
+              </div>  
+            </div>
+            
+            <div class="row">
+              <button type="button" class="btn btn-outline-primary rounded-10 float-right">Save</button> 
+              <span  class="fa-fw"></span>
+              <a href="/view"> <button type="button" class="btn btn-outline-primary rounded-10 float-right">Cancel</button> </a>
+            </div>  
+      </div> 
+    </div>  
+  </div>  

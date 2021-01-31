@@ -1,0 +1,74 @@
+<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+<script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+
+<div class="container py-5">
+<h3>Admin View of Expenses List</h3>
+<p-table [value]=expenseList [columns]="cols" selectionMode="single" (onRowSelect)="onSelectExpense($event)">
+    <ng-template pTemplate="header" let-columns >
+        <tr>
+            <th *ngFor="let column of cols">
+                {{column.header}}
+            </th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData let-columns="columns" >
+        <tr >
+            <td *ngFor="let column of cols">
+                {{rowData[column.field]}}
+            </td>
+            <td [ngSwitch]="rowData.Status">
+                <span *ngSwitchCase="'Pending'"><i class="fa fa-edit" [pSelectableRow]="rowData" style="border: 0px"></i></span>
+                <span *ngSwitchCase="'Approved'"></span>
+            </td>
+        </tr> 
+    </ng-template>
+</p-table>
+</div>
+
+<p-dialog header="Expense Details" [(visible)]="displayDialog" [responsive]="true" showEffect="fade" [modal]="true" [closable]="true" [style]="{'width':'600px'}">
+    <div class="ui-g ui-fluid" *ngIf="expenseDetails">
+        <div class="ui-g-4"><label for="firstName">First Name: </label>
+            <label style="padding-left: 20px;" >{{expenseDetails.firstName}}</label></div>
+
+        <div class="ui-g-4"><label for="lastName">Last Name: </label>
+            <label style="padding-left: 20px;" >{{expenseDetails.lastName}}</label></div>
+
+        <div class="ui-g-4"><label for="EmpNo">Employee ID: </label>
+            <label style="padding-left: 20px;" >{{expenseDetails.EmpNo}}</label></div>
+
+        <div class="ui-g-4"><label for="expenseType">Type of Expense: </label>
+            <label style="padding-left: 20px;" >{{expenseDetails.expenseType}}</label></div>
+
+        <div class="ui-g-4"><label for="date1">From Date: </label>
+            <label style="padding-left: 20px;" >{{expenseDetails.date1}}</label></div>
+
+        <div class="ui-g-4"><label for="date2">To Date: </label>
+            <label style="padding-left: 20px;" >{{expenseDetails.date2}}</label></div>
+
+        <div class="ui-g-4"><label for="project">Project Name: </label>
+            <label style="padding-left: 20px;" >{{expenseDetails.project}}</label></div>
+
+        <div class="ui-g-4"><label for="amount">Total Expenses: </label>
+            <label style="padding-left: 20px;" >{{expenseDetails.amount}}</label></div>
+
+        <div class="ui-g-4" ><label for="amount">Reciept: </label>
+                <label style="padding-left: 20px;" >
+                    <img src="assets/images/Receipt.jpg" alt="Receipt" (click)="viewFullImage()" style="width:50px; height: 50px;">
+                </label>
+        </div>
+
+    </div>
+    <p-footer>
+        <div class="ui-dialog-buttonpane ui-helper-clearfix">
+            <button type="button" pButton icon="pi pi-times" (click)="approveExpense()"  label="Approve"></button>
+            <button type="button" pButton icon="pi pi-check" (click)="rejectExpense()" label="Reject"></button>
+        </div>
+    </p-footer>
+</p-dialog>
+
+<p-dialog header="Employee Detailed Reciept" [(visible)]="displayImageDialog" [responsive]="true" showEffect="fade" [modal]="true" [closable]="true" [style]="{'width':'400px'}">
+    <div class="ui-g-4">
+        <img src="assets/images/Receipt.jpg" alt="Receipt View" />
+    </div>
+</p-dialog>
+
