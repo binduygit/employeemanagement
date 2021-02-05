@@ -1,4 +1,4 @@
-import { Component, OnInit, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnInit, OnChanges } from '@angular/core';
 import { PrimeNGConfig } from 'primeng/api';
 import { ApiService } from '.././api.service';
 import { CommonService } from '.././common.service';
@@ -10,13 +10,17 @@ import { CommunicateService } from '.././communicate.service';
   styleUrls: ['./form-list.component.css'],
   providers: [ApiService]
 })
+
+
+ 
 export class FormListComponent implements OnInit,OnChanges {
 
-  expenseList: Array<string> = [];
+  expenseList: any[];
   expenseDetails: Array<string> = [];
   cols:Array<string> = [];
   displayDialog: boolean = false;
   displayImageDialog: boolean = false;
+  displayReason: boolean = false; 
   
 
   constructor(private api: ApiService, private CommonService:CommonService, private CommunicateService:CommunicateService) {
@@ -55,6 +59,9 @@ export class FormListComponent implements OnInit,OnChanges {
     this.displayDialog = false;
   }
   rejectExpense() {
+    this.displayDialog = false;
+  }
+  partialApproved(){
     this.displayDialog = false;
   }
 }

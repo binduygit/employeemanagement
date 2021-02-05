@@ -4,13 +4,13 @@
       
       <ul class="nav navbar-nav ml-auto">
         <li class="nav-item ">
-          <a class="nav-link" href="" ><i class="fa fa-edit"></i>Add Expenses </a>
+          <a class="nav-link" routerLink="/" ><i class="fa fa-edit"></i>Add Expenses </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/list">Admin View</a>
+          <a class="nav-link" routerLink="/list">Admin View</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="/view">Personal View</a>
+            <a class="nav-link" [routerLink]="['/view']">Personal View</a>
           </li>
       </ul>
     </div>

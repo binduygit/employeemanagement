@@ -34,7 +34,8 @@
                 <div class="input-group">  
                   <div class="input-group-prepend"> 
                   </div>  
-                  <p-dropdown [options]="assignments" [(ngModel)]="selectAssignment" optionLabel="name"></p-dropdown>  
+                  <p-cascadeSelect [options]="assignments" optionLabel="subname" optionGroupLabel="name" 
+            [optionGroupChildren]="['subprojects']" [style]="{'minWidth': '14rem'}" placeholder="Select a Project"></p-cascadeSelect>
                 </div>  
               </div>  
             </div>  

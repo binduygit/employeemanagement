@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { PrimeNGConfig } from 'primeng/api';
 import { OutputCaptureComponent } from '../output-capture/output-capture.component';
+import { ActivatedRoute } from '@angular/router';
 
 interface City {
   name: string,
@@ -27,13 +28,12 @@ export class FormsComponent implements OnInit, AfterViewInit {
   selectExpenseType?: Expenses;
   cities?: City[];
   selectedCity1?: City;
-  assignments?: projectWork[];
-  selectAssignment?: projectWork;
+  assignments?: any[];
   expensesValue?:number;
   expensesTax?:number;
 
   @ViewChild(OutputCaptureComponent, {static: true}) outputCapture:OutputCaptureComponent;
-  constructor(private primengConfig: PrimeNGConfig) { 
+  constructor(private primengConfig: PrimeNGConfig, private route:ActivatedRoute) { 
     
   }
 
@@ -65,6 +65,7 @@ export class FormsComponent implements OnInit, AfterViewInit {
         {name: 'Paris', code: 'PRS'}
       ];
 
+   /* 
     this.assignments = [
       {name: 'Project1', code: 'P1'},
       {name: 'Project2', code: 'P2'},
@@ -72,6 +73,65 @@ export class FormsComponent implements OnInit, AfterViewInit {
       {name: 'Project4', code: 'P4'},
       {name: 'Project5', code: 'P5'}
     ];
+    */
+
+   this.assignments = [
+    {
+        name: 'Google',
+        code: 'P1',
+        subprojects: [
+            {
+              subname: 'Docs', 
+                code: 'sa'                       
+            },
+            {
+              subname: 'Photos',
+                code: 'sb'                       
+            },
+            {
+              subname: 'Drive',
+                code: 'sc'                       
+            }            
+        ]
+          },
+          {
+              name: 'Amazon', 
+              code: 'P2',
+              subprojects: [
+                  {
+                    subname: 'AWS',
+                      code: 'sx'                      
+                  },
+                  {
+                    subname: 'Prime',
+                      code: 'sy'                    
+                  },
+                  {
+                    subname: 'Audible',
+                    code: 'sz'                  
+                }                  
+              ]
+          },
+          {
+              name: 'Microsoft',
+              code: 'P3',
+              subprojects: [
+                  {
+                    subname: 'hotmail',
+                      code: 's1'
+                  },
+                  {
+                    subname: 'yahoo',
+                      code: 's2'
+                  },
+                  {
+                    subname: 'desktop',
+                      code: 's3'
+                  }
+              ]
+          }
+      ];
+    
   }
   
 }

@@ -25,6 +25,9 @@ import {FileUploadModule} from 'primeng/fileupload';
 import {DialogModule} from 'primeng/dialog';
 import {DataViewModule} from 'primeng/dataview';
 import {ContextMenuModule} from 'primeng/contextmenu';
+import { CascadeSelectModule } from 'primeng/cascadeselect';
+import {TabViewModule} from 'primeng/tabview';
+import { InputTextareaModule } from 'primeng/inputtextarea';
 
 
 const appRoutes: Routes = [
@@ -61,6 +64,9 @@ const appRoutes: Routes = [
     DialogModule,
     DataViewModule,
     ContextMenuModule,
+    CascadeSelectModule,
+    TabViewModule,
+    InputTextareaModule,
     RouterModule.forRoot(appRoutes,{enableTracing:true})
   ],
   providers: [],
