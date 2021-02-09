@@ -6,7 +6,7 @@
         <li class="nav-item ">
           <a class="nav-link" routerLink="/" ><i class="fa fa-edit"></i>Add Expenses </a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" *ngIf="financialEmployee['IsfinancialCtrl'] === true">
           <a class="nav-link" routerLink="/list">Admin View</a>
         </li>
         <li class="nav-item">

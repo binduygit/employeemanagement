@@ -1,0 +1,4 @@
+:host >>> .p-cascadeselect-item-active>.p-cascadeselect-sublist{
+    top: auto;
+    margin-top:-40px;
+}

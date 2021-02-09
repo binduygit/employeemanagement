@@ -2,18 +2,18 @@ import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { PrimeNGConfig } from 'primeng/api';
 import { OutputCaptureComponent } from '../output-capture/output-capture.component';
 import { ActivatedRoute } from '@angular/router';
+import { ApiService } from '.././api.service';
 
-interface City {
-  name: string,
-  code: string
-}
-interface projectWork {
-  name: string,
-  code: string
-}
+
 interface Expenses {
   name: string,
   key: string
+}
+
+interface Project{
+  ProjectCode: string,
+  ProjectTitle: string,
+  subprojects: Array<string>
 }
 
 @Component({
@@ -25,21 +25,81 @@ export class FormsComponent implements OnInit, AfterViewInit {
   date1: Date | undefined;
   date2: Date |  undefined;
   expenseType?: Expenses[];
+  selectProject?:Project[];
   selectExpenseType?: Expenses;
-  cities?: City[];
-  selectedCity1?: City;
-  assignments?: any[];
+  expLocation?: String;
+  allProjectList=[];
   expensesValue?:number;
   expensesTax?:number;
+  projectName?: string;
+  selectAssignment?:String;
+  addExpenseValues: Array<string> = [];
+  projects:Array<string> = [];
+  subprojects = [];
+  userId?:String;
+  employeeInfo?:Array<string> = [];
+  
 
   @ViewChild(OutputCaptureComponent, {static: true}) outputCapture:OutputCaptureComponent;
-  constructor(private primengConfig: PrimeNGConfig, private route:ActivatedRoute) { 
+  constructor(private api: ApiService, private primengConfig: PrimeNGConfig, private route:ActivatedRoute) { 
+    this.userId = (<HTMLInputElement>document.getElementById('UserId')).value;
+    this.getEmployeeInfo()
+  }
+
+  getEmployeeInfo = ()=>{
+    this.api.getEmploy(this.userId).subscribe(
+      data =>{
+        this.employeeInfo = data;
+        console.log(this.employeeInfo);
+      },
+      error => {
+        console.log(error);
+      }
+      
+    )
+
     
+  }
+  
+  getProjects = ()=>{
+    this.api.getProjectList().subscribe(
+      data => {
+        this.projects = data;
+        data.forEach(ProjectCode => {
+          this.api.getSubProjectList(ProjectCode.ProjectCode).subscribe(
+            data => {
+              this.subprojects = data;
+            },
+            error=>{
+              this.subprojects = [];
+            },
+            () => {
+              this.selectProject = [
+                {
+                  ProjectCode:ProjectCode.ProjectCode,
+                  ProjectTitle:ProjectCode.ProjectTitle,
+                  subprojects: this.subprojects
+                }              
+              ];
+              this.allProjectList = Array.from(new Set(this.allProjectList.concat(this.selectProject)));
+            }
+          )
+          
+          
+          //this.allProjectList= [this.allProjectList, ...this.selectProject];        
+        }); 
+      },
+      error => {
+        console.log(error);
+      }
+      
+    )
+      
   }
 
   ngAfterViewInit() {
-    console.log('Values on ngAfterViewInit():');
-    console.log("primaryColorSample:", this.outputCapture.getCapture());
+    //console.log('Values on ngAfterViewInit():');
+    //console.log("primaryColorSample:", this.outputCapture.getCapture());
   }  
 
 
@@ -47,7 +107,30 @@ export class FormsComponent implements OnInit, AfterViewInit {
     return this;
   }
 
+  addExpenses(){
+    var userId = (<HTMLInputElement>document.getElementById('UserId')).value;
+    var companyId = (<HTMLInputElement>document.getElementById('CompanyId')).value;
+    var totalExpenses = this.expensesValue + this.expensesTax;
+    console.log(userId);
+    var  addExpenseValues = {
+        empId: userId,
+        companyName: companyId,
+        expenseType: this.selectExpenseType,
+        project: this.selectAssignment,
+        subProject: this.selectAssignment,
+        fromDate: this.date1,
+        toDate: this.date2,
+        amount: totalExpenses,
+        status: "Pending"
+    }
+    
+  }
+
+
   ngOnInit(): void {
+
+    this.getProjects();
+
     this.expenseType = [
         {name: 'Food/Breverages', key:'FB'},
         {name:'Internet/Telephone', key:'IT'},
@@ -57,81 +140,11 @@ export class FormsComponent implements OnInit, AfterViewInit {
         {name:'Other Expenses', key:'OE'}
       ];   
       
-    this.cities = [
-        {name: 'New York', code: 'NY'},
-        {name: 'Rome', code: 'RM'},
-        {name: 'London', code: 'LDN'},
-        {name: 'Istanbul', code: 'IST'},
-        {name: 'Paris', code: 'PRS'}
-      ];
-
-   /* 
-    this.assignments = [
-      {name: 'Project1', code: 'P1'},
-      {name: 'Project2', code: 'P2'},
-      {name: 'Project3', code: 'P3'},
-      {name: 'Project4', code: 'P4'},
-      {name: 'Project5', code: 'P5'}
-    ];
-    */
-
-   this.assignments = [
-    {
-        name: 'Google',
-        code: 'P1',
-        subprojects: [
-            {
-              subname: 'Docs', 
-                code: 'sa'                       
-            },
-            {
-              subname: 'Photos',
-                code: 'sb'                       
-            },
-            {
-              subname: 'Drive',
-                code: 'sc'                       
-            }            
-        ]
-          },
-          {
-              name: 'Amazon', 
-              code: 'P2',
-              subprojects: [
-                  {
-                    subname: 'AWS',
-                      code: 'sx'                      
-                  },
-                  {
-                    subname: 'Prime',
-                      code: 'sy'                    
-                  },
-                  {
-                    subname: 'Audible',
-                    code: 'sz'                  
-                }                  
-              ]
-          },
-          {
-              name: 'Microsoft',
-              code: 'P3',
-              subprojects: [
-                  {
-                    subname: 'hotmail',
-                      code: 's1'
-                  },
-                  {
-                    subname: 'yahoo',
-                      code: 's2'
-                  },
-                  {
-                    subname: 'desktop',
-                      code: 's3'
-                  }
-              ]
-          }
-      ];
-    
+       
   }
   
+
 }
+
+
+

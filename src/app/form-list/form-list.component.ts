@@ -41,6 +41,7 @@ export class FormListComponent implements OnInit,OnChanges {
           console.log(error);
         }
       )
+      
     }
 
   ngOnInit(): void {
