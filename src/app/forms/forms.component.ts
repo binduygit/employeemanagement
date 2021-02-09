@@ -50,7 +50,6 @@ export class FormsComponent implements OnInit, AfterViewInit {
     this.api.getEmploy(this.userId).subscribe(
       data =>{
         this.employeeInfo = data;
-        console.log(this.employeeInfo);
       },
       error => {
         console.log(error);
@@ -84,9 +83,6 @@ export class FormsComponent implements OnInit, AfterViewInit {
               this.allProjectList = Array.from(new Set(this.allProjectList.concat(this.selectProject)));
             }
           )
-          
-          
-          //this.allProjectList= [this.allProjectList, ...this.selectProject];        
         }); 
       },
       error => {

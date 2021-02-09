@@ -3,7 +3,6 @@ import { PrimeNGConfig } from 'primeng/api';
 import { ApiService } from '.././api.service';
 import { CommonService } from '.././common.service';
 import { CommunicateService } from '.././communicate.service';
-import { FormGroup, FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-form-list',
@@ -23,11 +22,6 @@ export class FormListComponent implements OnInit,OnChanges {
   displayImageDialog: boolean = false;
   displayReason: boolean = false; 
   isActive: boolean = false;
-
-  reactiveForm = new FormGroup({
-    expenseAmount: new FormControl(),
-    approvedAmount: new FormControl()
-  })
   
 
   constructor(private api: ApiService, private CommonService:CommonService, private CommunicateService:CommunicateService) {
@@ -55,10 +49,6 @@ export class FormListComponent implements OnInit,OnChanges {
 
   ngOnInit(): void {
    
-    this.reactiveForm.get("approvedAmount").valueChanges.subscribe(selectedValue => {
-      console.log('approvedAmount changed');
-      console.log(selectedValue);
-    })
   }  
 
   onSelectExpense(event) {    

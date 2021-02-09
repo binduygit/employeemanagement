@@ -21,7 +21,6 @@ export class HeaderComponent implements OnInit {
     this.api.getEmploy(this.empID).subscribe(
       data =>{
         this.financialEmployee = data;
-        console.log(this.financialEmployee);
       },
       error => {
         console.log(error);
