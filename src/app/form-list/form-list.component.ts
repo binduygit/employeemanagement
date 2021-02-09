@@ -3,6 +3,7 @@ import { PrimeNGConfig } from 'primeng/api';
 import { ApiService } from '.././api.service';
 import { CommonService } from '.././common.service';
 import { CommunicateService } from '.././communicate.service';
+import { FormGroup, FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-form-list',
@@ -21,6 +22,12 @@ export class FormListComponent implements OnInit,OnChanges {
   displayDialog: boolean = false;
   displayImageDialog: boolean = false;
   displayReason: boolean = false; 
+  isActive: boolean = false;
+
+  reactiveForm = new FormGroup({
+    expenseAmount: new FormControl(),
+    approvedAmount: new FormControl()
+  })
   
 
   constructor(private api: ApiService, private CommonService:CommonService, private CommunicateService:CommunicateService) {
@@ -30,6 +37,8 @@ export class FormListComponent implements OnInit,OnChanges {
   ngOnChanges(): void{
     this.CommonService.logInfo("formListComponent","ngOnChange");
   }
+  
+
    getAllExpenses = ()=>{
       this.api.getExpenses().subscribe(
         data => {
@@ -46,6 +55,10 @@ export class FormListComponent implements OnInit,OnChanges {
 
   ngOnInit(): void {
    
+    this.reactiveForm.get("approvedAmount").valueChanges.subscribe(selectedValue => {
+      console.log('approvedAmount changed');
+      console.log(selectedValue);
+    })
   }  
 
   onSelectExpense(event) {    
@@ -58,9 +71,10 @@ export class FormListComponent implements OnInit,OnChanges {
   }
   approveExpense() {
     this.displayDialog = false;
+    this.isActive = false;
   }
   rejectExpense() {
-    this.displayDialog = false;
+    this.isActive = true;
   }
   partialApproved(){
     this.displayDialog = false;

@@ -93,19 +93,20 @@
             <label style="padding-left: 20px;" >{{expenseDetails.project}}</label></div>
 
         <div class="ui-g-4"><label for="amount">Total Expenses: </label>
-            <label style="padding-left: 20px;" >{{expenseDetails.amount}}</label></div>
+            <label style="padding-left: 20px;" id="expenseAmount" name="expenseAmount" >{{expenseDetails.amount}}</label></div>
 
         <div class="ui-g-4"><label for="amount">Approved Expenses: </label>
-            <p-inputNumber mode="decimal" [ngModel]="expenseDetails.amount">
+            <p-inputNumber mode="decimal" [ngModel]="expenseDetails.amount" id="approvedAmount" name="approvedAmount">
 
             </p-inputNumber>
         </div>
-        <div class="ui-g-4"  style="padding-top: 20px;">
+        <div class="ui-g-4" [ngClass]="isActive?'show':'noshow'" id="rejectReason"  style="padding-top: 20px;">
             <span class="p-float-label">
                 <textarea id="float-input" rows="4" cols="40" pInputTextarea></textarea>
-                <label for="float-input">Reason for Rejection</label>
+                <label for="float-input">Reason </label>
             </span>
         </div>
+
 
         <div class="ui-g-4" ><label for="amount">Reciept: </label>
                 <label style="padding-left: 20px;" >
