@@ -2,66 +2,81 @@
 <h3>Admin View of Expenses List</h3>
 <div>
     <p-tabView >
-        <p-tabPanel  header="Approved">
-            <p-table [value]=expenseList [columns]="cols" selectionMode="single" (onRowSelect)="onSelectExpense($event)">
-                <ng-template pTemplate="header" let-columns >
-                    <tr>
-                        <th *ngFor="let column of cols">
-                            {{column.header}}
-                        </th>
-                    </tr>
-                </ng-template>
-                
-                    <ng-template pTemplate="body" let-rowData let-columns="columns" >
-                            <tr *ngIf="rowData.Status === 'Approved'">
-                                <td *ngFor="let column of cols" >
-                                    {{rowData[column.field]}}
-                                </td>
-                            </tr> 
-                    </ng-template>
-            </p-table>
-        </p-tabPanel>
         <p-tabPanel  header="Pending">
-            <p-table [value]=expenseList [columns]="cols" selectionMode="single" (onRowSelect)="onSelectExpense($event)">
-                <ng-template pTemplate="header" let-columns >
+            <p-table [value]=allExpenseList  selectionMode="single" (onRowSelect)="onSelectExpense($event)">
+                <ng-template pTemplate="header"  >
                     <tr>
-                        <th *ngFor="let column of cols">
-                            {{column.header}}
-                        </th>
+                        <th>Expense Type</th>
+                        <th>Project</th>
+                        <th>SubProject</th>
+                        <th>Tota Expenses</th>
+                        <th>Expense Date</th>
+                        <th>Status</th>
                     </tr>
                 </ng-template>
                 
-                    <ng-template pTemplate="body" let-rowData let-columns="columns" >
-                        <tr *ngIf="rowData.Status === 'Pending'" [pSelectableRow]="rowData">
-                            <td *ngFor="let column of cols">
-                                {{rowData[column.field]}}
-                            </td>
-                            
-                        </tr> 
-                        
-                        
+                    <ng-template pTemplate="body" let-rowData  >
+                        <tr *ngIf="rowData.Status === 'Pending'">
+                            <td>{{rowData['ExpenseId']}}</td>
+                            <td>{{rowData['ProjectCode']}}</td>
+                            <td>{{rowData['SubProjectId']}}</td>
+                            <td>{{rowData['AmountRequested']}}</td>
+                            <td>{{rowData['ExpenseDate']}}</td>
+                            <td>{{rowData['Status']}}</td> 
+                            <span class="fa fa-edit" (click)="onSelectExpense(rowData['_id'])" style="padding-top: 20px; cursor: pointer;"></span>
+                        </tr>
                     </ng-template>
             </p-table>
         </p-tabPanel>
-        <p-tabPanel  header="Rejected">
-            <p-table [value]=expenseList [columns]="cols" selectionMode="single" (onRowSelect)="onSelectExpense($event)">
+        <p-tabPanel  header="Approved">
+            <p-table [value]=allExpenseList >
                 <ng-template pTemplate="header" let-columns >
                     <tr>
-                        <th *ngFor="let column of cols">
-                            {{column.header}}
-                        </th>
+                        <th>Expense Type</th>
+                        <th>Project</th>
+                        <th>SubProject</th>
+                        <th>Tota Expenses</th>
+                        <th>Expense Date</th>
+                        <th>Status</th>
+                    </tr>
+                </ng-template>
+                
+                    <ng-template pTemplate="body" let-rowData  >
+                        <tr *ngIf="rowData.Status === 'Approved'">
+                            <td>{{rowData['ExpenseId']}}</td>
+                            <td>{{rowData['ProjectCode']}}</td>
+                            <td>{{rowData['SubProjectId']}}</td>
+                            <td>{{rowData['AmountRequested']}}</td>
+                            <td>{{rowData['ExpenseDate']}}</td>
+                            <td>{{rowData['Status']}}</td>                
+                        </tr>
+                             
+                    </ng-template>
+            </p-table>
+        </p-tabPanel>
+        
+        <p-tabPanel  header="Rejected">
+            <p-table [value]=allExpenseList selectionMode="single" >
+                <ng-template pTemplate="header" let-columns >
+                    <tr>
+                        <th>Expense Type</th>
+                        <th>Project</th>
+                        <th>SubProject</th>
+                        <th>Tota Expenses</th>
+                        <th>Expense Date</th>
+                        <th>Status</th>
                     </tr>
                 </ng-template>
                 
                     <ng-template pTemplate="body" let-rowData let-columns="columns" >
                         <tr *ngIf="rowData.Status === 'Rejected'" [pSelectableRow]="rowData">
-                            <td *ngFor="let column of cols">
-                                {{rowData[column.field]}}
-                            </td>
-                            
+                            <td>{{rowData['ExpenseId']}}</td>
+                            <td>{{rowData['ProjectCode']}}</td>
+                            <td>{{rowData['SubProjectId']}}</td>
+                            <td>{{rowData['AmountRequested']}}</td>
+                            <td>{{rowData['ExpenseDate']}}</td>
+                            <td>{{rowData['Status']}}</td>                             
                         </tr> 
-                        
-                        
                     </ng-template>
             </p-table>
         </p-tabPanel>
@@ -71,38 +86,36 @@
 
 <p-dialog header="Expense Details" [(visible)]="displayDialog" [responsive]="true" showEffect="fade" [modal]="true" [closable]="true" [style]="{'width':'600px'}">
     <div class="ui-g ui-fluid" *ngIf="expenseDetails">
-        <div class="ui-g-4"><label for="firstName">First Name: </label>
-            <label style="padding-left: 20px;" >{{expenseDetails.firstName}}</label></div>
-
-        <div class="ui-g-4"><label for="lastName">Last Name: </label>
-            <label style="padding-left: 20px;" >{{expenseDetails.lastName}}</label></div>
+        <div class="ui-g-4"><label for="EmpName">Employee Name: </label>
+            <label style="padding-left: 20px;" >{{employeeDetails.EmpName}} {{employeeDetails.LastName}}</label></div>
 
         <div class="ui-g-4"><label for="EmpNo">Employee ID: </label>
-            <label style="padding-left: 20px;" >{{expenseDetails.EmpNo}}</label></div>
+            <label style="padding-left: 20px;" >{{expenseDetails.EmployeeId}}</label></div>
 
         <div class="ui-g-4"><label for="expenseType">Type of Expense: </label>
-            <label style="padding-left: 20px;" >{{expenseDetails.expenseType}}</label></div>
+            <label style="padding-left: 20px;" >{{expenseDetails.ExpenseId}}</label></div>
 
-        <div class="ui-g-4"><label for="date1">From Date: </label>
-            <label style="padding-left: 20px;" >{{expenseDetails.date1}}</label></div>
+        <div class="ui-g-4"><label for="date1">Expense Date: </label>
+            <label style="padding-left: 20px;" >{{expenseDetails.ExpenseDate}}</label></div>
 
-        <div class="ui-g-4"><label for="date2">To Date: </label>
-            <label style="padding-left: 20px;" >{{expenseDetails.date2}}</label></div>
+        <div class="ui-g-4"><label for="date2">Project Name: </label>
+            <label style="padding-left: 20px;" >{{expenseDetails.ProjectCode}}</label></div>
 
-        <div class="ui-g-4"><label for="project">Project Name: </label>
-            <label style="padding-left: 20px;" >{{expenseDetails.project}}</label></div>
+        <div class="ui-g-4"><label for="project">SubProject Name: </label>
+            <label style="padding-left: 20px;" >{{expenseDetails.SubProjectId}}</label></div>
 
         <div class="ui-g-4"><label for="amount">Total Expenses: </label>
-            <label style="padding-left: 20px;" id="expenseAmount" name="expenseAmount" >{{expenseDetails.amount}}</label></div>
+            <label style="padding-left: 20px;" id="expenseAmount" name="expenseAmount" >{{expenseDetails.AmountRequested}}</label></div>
 
         <div class="ui-g-4"><label for="amount">Approved Expenses: </label>
-            <p-inputNumber mode="decimal" [ngModel]="expenseDetails.amount" id="approvedAmount" name="approvedAmount">
+            <p-inputNumber mode="decimal" [(ngModel)]="expenseDetails.AmountRequested" (keyup)="approvedExpense($event.target.value)" id="approvedAmount" name="approvedAmount" value="expenseDetails.AmountRequested">
 
             </p-inputNumber>
         </div>
+        <div [(ngModel)]="validReason" style="color:red" ></div>
         <div class="ui-g-4" [ngClass]="isActive?'show':'noshow'" id="rejectReason"  style="padding-top: 20px;">
             <span class="p-float-label">
-                <textarea id="float-input" rows="4" cols="40" pInputTextarea></textarea>
+                <textarea id="float-input" rows="4" cols="40" [(ngModel)]="approvalRemarks" pInputTextarea></textarea>
                 <label for="float-input">Reason </label>
             </span>
         </div>
@@ -117,7 +130,7 @@
     </div>
     <p-footer>
         <div class="ui-dialog-buttonpane ui-helper-clearfix">
-            <button type="button" pButton icon="pi pi-check" (click)="approveExpense()"  label="Approve"></button>
+            <button type="button" pButton icon="pi pi-check" (click)="approveEmployeeExpense()"  label="Approve"></button>
             <button type="button" pButton icon="pi pi-times" (click)="rejectExpense()" label="Reject"></button>
         </div>
     </p-footer>

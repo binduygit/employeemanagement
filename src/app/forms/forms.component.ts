@@ -1,47 +1,48 @@
 import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { PrimeNGConfig } from 'primeng/api';
 import { OutputCaptureComponent } from '../output-capture/output-capture.component';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ApiService } from '.././api.service';
+import {ExpenseService} from '.././remoteDB/expense.service';
+import { DatePipe } from '@angular/common';
 
 
 interface Expenses {
-  name: string,
+  name: string, 
   key: string
 }
 
-interface Project{
-  ProjectCode: string,
-  ProjectTitle: string,
-  subprojects: Array<string>
-}
+
+
 
 @Component({
   selector: 'app-forms',
   templateUrl: './forms.component.html',
-  styleUrls: ['./forms.component.css']
+  styleUrls: ['./forms.component.css'],
+  providers:[DatePipe]
 })
 export class FormsComponent implements OnInit, AfterViewInit { 
   date1: Date | undefined;
   date2: Date |  undefined;
   expenseType?: Expenses[];
-  selectProject?:Project[];
-  selectExpenseType?: Expenses;
+  selectProject?:[];
+  selectExpenseType?:String;
   expLocation?: String;
   allProjectList=[];
   expensesValue?:number;
   expensesTax?:number;
   projectName?: string;
-  selectAssignment?:String;
-  addExpenseValues: Array<string> = [];
+  selectAssignment?:[];
+ 
   projects:Array<string> = [];
-  subprojects = [];
+  subProjectList = [];
   userId?:String;
   employeeInfo?:Array<string> = [];
-  
+  isActive?:boolean = false;
+  selectSubProject?:[];
 
   @ViewChild(OutputCaptureComponent, {static: true}) outputCapture:OutputCaptureComponent;
-  constructor(private api: ApiService, private primengConfig: PrimeNGConfig, private route:ActivatedRoute) { 
+  constructor(private api: ApiService, private primengConfig: PrimeNGConfig, private datepipe: DatePipe, private router: Router, private route:ActivatedRoute, private expenseService:ExpenseService) { 
     this.userId = (<HTMLInputElement>document.getElementById('UserId')).value;
     this.getEmployeeInfo()
   }
@@ -54,46 +55,48 @@ export class FormsComponent implements OnInit, AfterViewInit {
       error => {
         console.log(error);
       }
-      
     )
-
-    
   }
   
   getProjects = ()=>{
     this.api.getProjectList().subscribe(
       data => {
-        this.projects = data;
-        data.forEach(ProjectCode => {
-          this.api.getSubProjectList(ProjectCode.ProjectCode).subscribe(
-            data => {
-              this.subprojects = data;
-            },
-            error=>{
-              this.subprojects = [];
-            },
-            () => {
-              this.selectProject = [
-                {
-                  ProjectCode:ProjectCode.ProjectCode,
-                  ProjectTitle:ProjectCode.ProjectTitle,
-                  subprojects: this.subprojects
-                }              
-              ];
-              this.allProjectList = Array.from(new Set(this.allProjectList.concat(this.selectProject)));
-            }
-          )
-        }); 
+        this.allProjectList = data;
       },
       error => {
-        console.log(error);
+        this.allProjectList = [];
       }
       
     )
       
   }
 
+  subProjects(){
+    var code = this.selectAssignment['ProjectCode'];
+    if(code){
+      this.api.getSubProjectList(code).subscribe(
+        data => {
+          this.subProjectList= data;
+          if(data.length){
+            this.isActive = true;
+          } 
+          else{
+          this.isActive = false;
+          }
+        },
+        error => {
+          this.isActive = false;
+          this.subProjectList = [];
+        },
+        () => {
+          //console.log(this.subProjectList);
+        }
+      )
+    }
+  }
+
   ngAfterViewInit() {
+
     //console.log('Values on ngAfterViewInit():');
     //console.log("primaryColorSample:", this.outputCapture.getCapture());
   }  
@@ -107,18 +110,33 @@ export class FormsComponent implements OnInit, AfterViewInit {
     var userId = (<HTMLInputElement>document.getElementById('UserId')).value;
     var companyId = (<HTMLInputElement>document.getElementById('CompanyId')).value;
     var totalExpenses = this.expensesValue + this.expensesTax;
-    console.log(userId);
-    var  addExpenseValues = {
-        empId: userId,
-        companyName: companyId,
-        expenseType: this.selectExpenseType,
-        project: this.selectAssignment,
-        subProject: this.selectAssignment,
-        fromDate: this.date1,
-        toDate: this.date2,
-        amount: totalExpenses,
-        status: "Pending"
+    var expenseDate = this.datepipe.transform(this.date1, 'dd/MM/yyyy');
+    var addExpenseValues = {
+      EmployeeId: userId,
+      CompanyId: companyId,
+      ExpenseId: this.selectExpenseType['name'],
+      ProjectCode: this.selectAssignment['ProjectTitle'],
+      SubProjectId: this.selectSubProject['SubProjectTitle'],
+      ExpenseDate: expenseDate,
+      AmountRequested: totalExpenses,
+      AmountApproved: 0,
+      DocumentsSubmitted: '',
+      Status:'Pending',
+      ApporvarUserId:'',
+      ApprovedOn:null,
+      IsApproved:false,
+      IsPaid: false,
+      PaymentRemarks:'',
+      PaymentDate:null,
+      ApprovalRemarks:''
     }
+    console.log(addExpenseValues);
+    this.expenseService.postExpense(addExpenseValues).subscribe(
+      (res)=>{
+        console.log("Successful");
+        this.router.navigate(['view'])
+      }
+    );
     
   }
 
@@ -135,10 +153,8 @@ export class FormsComponent implements OnInit, AfterViewInit {
         {name:'Travel- Private Transport', key:'TPRI'},
         {name:'Other Expenses', key:'OE'}
       ];   
-      
        
   }
-  
 
 }
 

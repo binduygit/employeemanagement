@@ -1,19 +1,24 @@
 <div class="container py-5">
     <h3>Personal Expenses List</h3>
-    <p-table [value]=personalList [columns]="fieldList">
-        <ng-template pTemplate="header" let-columns >
+    <p-table [value]=personalExpenseList >
+        <ng-template pTemplate="header" >
             <tr>
-                <th *ngFor="let column of fieldList">
-                    {{column.header}}
-                </th>
+                <th>Expense Type</th>
+                <th>Project</th>
+                <th>SubProject</th>
+                <th>Tota Expenses</th>
+                <th>Expense Date</th>
+                <th>Status</th>
             </tr>
         </ng-template>
-        <ng-template pTemplate="body" let-rowData let-columns="columns" >
+        <ng-template pTemplate="body" let-rowData  >
             <tr >
-                <td *ngFor="let column of fieldList">
-                    {{rowData[column.field]}}
-                </td>
-                
+                <td>{{rowData['ExpenseId']}}</td>
+                <td>{{rowData['ProjectCode']}}</td>
+                <td>{{rowData['SubProjectId']}}</td>
+                <td>{{rowData['AmountRequested']}}</td>
+                <td>{{rowData['ExpenseDate']}}</td>
+                <td>{{rowData['Status']}}</td>                
             </tr>
         </ng-template>
         <ng-template pTemplate="summary" >

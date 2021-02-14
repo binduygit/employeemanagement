@@ -17,7 +17,7 @@
                 <div class="input-group">  
                   <div class="input-group-prepend">  
                       
-                      <p-dropdown [options]="expenseType" [(ngModel)]="selectExpenseType" optionLabel="name"></p-dropdown> 
+                      <p-dropdown [options]="expenseType" [(ngModel)]="selectExpenseType" optionLabel="name" placeholder="Select Expense"></p-dropdown> 
                   </div>  
                 </div>  
               </div>  
@@ -36,26 +36,23 @@
           <div class="row">  
               <div class="col-sm-6 col-md-6 col-xs-12">  
                 <div class="form-group">  
-                  <label>Assignment Type:</label>  
+                  <label>Project:</label>  
                   <div class="input-group">  
                     <div class="input-group-prepend"> 
-                    </div>  
-                    
-                    <p-cascadeSelect [options]="allProjectList" optionLabel="SubProjectTitle" [ngModel]="selectAssignment" optionGroupLabel="ProjectTitle" 
-              [optionGroupChildren]="['subprojects']"  placeholder="Select Project">
-                       
-                    </p-cascadeSelect>
-                    
+                      <p-dropdown [options]="allProjectList" optionLabel="ProjectTitle" [(ngModel)]="selectAssignment" placeholder="Select a Project" (click)="subProjects()"></p-dropdown>
+                    </div> 
                   </div>  
                 </div>  
               </div>  
               <div class="col-sm-6 col-md-6 col-xs-12">  
-                <div class="form-group">  
-                  <label>Location:</label>  
+                <div class="form-group"  [ngClass]="isActive?'show':'noshow'">  
+                    <label >Sub Project</label>                    
                   <div class="input-group">  
                     <div class="input-group-prepend"> 
+                      <p-dropdown [options]="subProjectList" optionLabel="SubProjectTitle" [(ngModel)]="selectSubProject" placeholder="Select" ></p-dropdown>
                     </div>  
-                    <input type="text" pInputText [(ngModel)]="expLocation"/>
+                    <div>
+                  </div>
                   </div>  
                 </div>  
               </div>  
@@ -63,7 +60,7 @@
           <div class="row">  
               <div class="col-sm-6 col-md-6 col-xs-12">  
                 <div class="form-group">  
-                  <label>From:</label> 
+                  <label>Expense Date:</label> 
                   <div class="input-group">  
                     <div class="input-group-prepend">  
                       <span class="input-group-text">  
@@ -77,14 +74,11 @@
               </div>  
               <div class="col-sm-6 col-md-6 col-xs-6">  
                 <div class="form-group">  
-                  <label>To:</label> 
+                  <label>Location:</label> 
                   <div class="input-group">  
                     <div class="input-group-prepend">  
-                      <span class="input-group-text">  
-                        <i class="fa fa-calendar"></i>  
-                      </span>
-                    </div>
-                    <p-calendar inputId="icon" [(ngModel)]="date2"  ></p-calendar> 
+                      <input type="text" pInputText [(ngModel)]="expLocation"/> 
+                    </div>                    
                   </div>             
                 </div> 
               </div>  
@@ -113,7 +107,7 @@
               </div>
               
               <div class="row">
-                <button type="button" class="btn btn-outline-primary rounded-10 float-right">Save</button> 
+                <button type="button" class="btn btn-outline-primary rounded-10 float-right" (click)="addExpenses()">Save</button> 
                 <span  class="fa-fw"></span>
                 <a  [routerLink]="['/view']"> <button type="button" class="btn btn-outline-primary rounded-10 float-right">Cancel</button> </a>
               </div>  
