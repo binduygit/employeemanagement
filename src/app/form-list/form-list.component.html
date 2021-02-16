@@ -9,14 +9,14 @@
                         <th>Expense Type</th>
                         <th>Project</th>
                         <th>SubProject</th>
-                        <th>Tota Expenses</th>
+                        <th>Total Expenses</th>
                         <th>Expense Date</th>
                         <th>Status</th>
                     </tr>
                 </ng-template>
                 
                     <ng-template pTemplate="body" let-rowData  >
-                        <tr *ngIf="rowData.Status === 'Pending'">
+                        <tr *ngIf="rowData.Status === 'Submitted'">
                             <td>{{rowData['ExpenseId']}}</td>
                             <td>{{rowData['ProjectCode']}}</td>
                             <td>{{rowData['SubProjectId']}}</td>
@@ -35,18 +35,20 @@
                         <th>Expense Type</th>
                         <th>Project</th>
                         <th>SubProject</th>
-                        <th>Tota Expenses</th>
+                        <th>Total Expenses</th>
+                        <th>Approved Expenses</th>
                         <th>Expense Date</th>
                         <th>Status</th>
                     </tr>
                 </ng-template>
                 
                     <ng-template pTemplate="body" let-rowData  >
-                        <tr *ngIf="rowData.Status === 'Approved'">
+                        <tr *ngIf="rowData.Status === 'Approved' || rowData.Status === 'PartiallyApproved'">
                             <td>{{rowData['ExpenseId']}}</td>
                             <td>{{rowData['ProjectCode']}}</td>
                             <td>{{rowData['SubProjectId']}}</td>
                             <td>{{rowData['AmountRequested']}}</td>
+                            <td>{{rowData['AmountApproved']}}</td>
                             <td>{{rowData['ExpenseDate']}}</td>
                             <td>{{rowData['Status']}}</td>                
                         </tr>
@@ -62,8 +64,9 @@
                         <th>Expense Type</th>
                         <th>Project</th>
                         <th>SubProject</th>
-                        <th>Tota Expenses</th>
+                        <th>Total Expenses</th>
                         <th>Expense Date</th>
+                        <th>Rejected Reason</th>
                         <th>Status</th>
                     </tr>
                 </ng-template>
@@ -75,6 +78,7 @@
                             <td>{{rowData['SubProjectId']}}</td>
                             <td>{{rowData['AmountRequested']}}</td>
                             <td>{{rowData['ExpenseDate']}}</td>
+                            <td>{{rowData['ApprovalRemarks']}}</td>
                             <td>{{rowData['Status']}}</td>                             
                         </tr> 
                     </ng-template>
@@ -108,16 +112,16 @@
             <label style="padding-left: 20px;" id="expenseAmount" name="expenseAmount" >{{expenseDetails.AmountRequested}}</label></div>
 
         <div class="ui-g-4"><label for="amount">Approved Expenses: </label>
-            <p-inputNumber mode="decimal" [(ngModel)]="expenseDetails.AmountRequested" (keyup)="approvedExpense($event.target.value)" id="approvedAmount" name="approvedAmount" value="expenseDetails.AmountRequested">
-
-            </p-inputNumber>
+            <input pInputText type="number" [(ngModel)]="amountApproved" (keyup)="approvedExpense()" 
+            value="{{expenseDetails.AmountRequested}}"/>
         </div>
-        <div [(ngModel)]="validReason" style="color:red" ></div>
+
         <div class="ui-g-4" [ngClass]="isActive?'show':'noshow'" id="rejectReason"  style="padding-top: 20px;">
+            <label for="float-input">Reason </label>
             <span class="p-float-label">
-                <textarea id="float-input" rows="4" cols="40" [(ngModel)]="approvalRemarks" pInputTextarea></textarea>
-                <label for="float-input">Reason </label>
+                <textarea rows="4" cols="40" [(ngModel)]="approvalRemarks" ></textarea>                
             </span>
+           <label class="float-right"> <a style="cursor: pointer;" (click)="rejectExpenseWithReason()" >Reject </a></label>
         </div>
 
 

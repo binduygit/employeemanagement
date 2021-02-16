@@ -121,7 +121,7 @@ export class FormsComponent implements OnInit, AfterViewInit {
       AmountRequested: totalExpenses,
       AmountApproved: 0,
       DocumentsSubmitted: '',
-      Status:'Pending',
+      Status:'Submitted',
       ApporvarUserId:'',
       ApprovedOn:null,
       IsApproved:false,

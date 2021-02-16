@@ -30,7 +30,7 @@ export class FormListComponent implements OnInit,OnChanges {
   reason:String;
   validReason:String;
   allExpenseList:EmployeeExpenses[];
-  employeeDetails:[];
+  employeeDetails?:Array<string> = [];
   amountApproved:Number;
   approvalRemarks:String;
 
@@ -57,12 +57,11 @@ export class FormListComponent implements OnInit,OnChanges {
     }
 
   ngOnInit(): void {
-   
   }  
 
   onSelectExpense(event) {    
     //this.expenseDetails = {...event.data};  
-    console.log(event);  
+      
     this.displayDialog = true;
     this.expenseService.getSelectedExpense(event).subscribe(res => {
       this.expenseDetails = res as EmployeeExpenses[];
@@ -71,7 +70,7 @@ export class FormListComponent implements OnInit,OnChanges {
       console.log(err);
     },
     ()=>{
-      console.log(this.expenseDetails);
+      this.amountApproved = this.expenseDetails['AmountRequested'];
       this.api.getEmploy(this.expenseDetails['EmployeeId']).subscribe(
         (data) => {
           this.employeeDetails = data;
@@ -83,8 +82,6 @@ export class FormListComponent implements OnInit,OnChanges {
     }
     
     );
-
-   
   }
 
   viewFullImage() {
@@ -94,20 +91,19 @@ export class FormListComponent implements OnInit,OnChanges {
    // this.displayDialog = false;
    var userId = (<HTMLInputElement>document.getElementById('UserId')).value;
    var approvedDate = this.datepipe.transform(new Date, 'dd/MM/yyyy');
-    this.isActive = false;
-    if(this.amountApproved && this.amountApproved !== this.expenseDetails['AmountRequested']){
+    if(this.amountApproved < this.expenseDetails['AmountRequested']){
+      var approvalStatus = 'PartiallyApproved';
     }
     else{
-      this.amountApproved = this.expenseDetails['AmountRequested'];
+      var approvalStatus = 'Approved';
     }
-
     var updatedExpenses = {
       _id:this.expenseDetails['_id'],  
       IsPaid: false,
       PaymentRemarks:'',
       PaymentDate:null,
       AmountApproved:this.amountApproved,
-      Status:'Approved',
+      Status:approvalStatus,
       ApporvarUserId:userId,
       ApprovedOn:approvedDate,
       IsApproved:true,
@@ -126,56 +122,65 @@ export class FormListComponent implements OnInit,OnChanges {
         console.log("Error");
       }
     );
-
+      
 
   }
   rejectExpense() {
     
+    this.approvalRemarks = '';
     this.isActive = true;
-    var userId = (<HTMLInputElement>document.getElementById('UserId')).value;
-   var approvedDate = this.datepipe.transform(new Date, 'dd/MM/yyyy');
-    this.isActive = false;
-    
-    
-    var rejectedExpense = {
-      _id:this.expenseDetails['_id'],  
-      IsPaid: false,
-      PaymentRemarks:'',
-      PaymentDate:null,
-      Status:'Rejected',
-      ApporvarUserId:userId,
-      ApprovedOn:approvedDate,
-      IsApproved:false,
-      ApprovalRemarks:this.approvalRemarks
-    }
-    this.expenseService.updateExpenses(rejectedExpense).subscribe(
-      (res)=>{
-        console.log("Successful");
-        this.displayDialog = false;
-        this.router.navigate(['list'])
-        .then(() => {
-          window.location.reload();
-        });
-      },
-      (err)=>{
-        console.log("Error");
-      }
-    );
-
-
     
   }
-  approvedExpense(newValue:Number){
+  approvedExpense(){
 
-    
-
-    if(newValue < this.expenseDetails['AmountRequested']){
+    if(this.amountApproved < this.expenseDetails['AmountRequested']){
       this.isActive = true;
-      this.amountApproved = newValue;
     }
     else {
       this.isActive = false;
-    }
-    
+    }    
   }
+
+  rejectExpenseWithReason() {
+  
+    
+    var userId = (<HTMLInputElement>document.getElementById('UserId')).value;
+    var approvedDate = this.datepipe.transform(new Date, 'dd/MM/yyyy');
+    console.log(this.approvalRemarks);
+    
+    if(this.approvalRemarks !=""){
+       var rejectedExpense = {
+         _id:this.expenseDetails['_id'],  
+         IsPaid: false,
+         PaymentRemarks:'',
+         PaymentDate:null,
+         Status:'Rejected',
+         ApporvarUserId:userId,
+         ApprovedOn:approvedDate,
+         IsApproved:false,
+         ApprovalRemarks:this.approvalRemarks
+       }
+       this.expenseService.updateExpenses(rejectedExpense).subscribe(
+         (res)=>{
+           console.log("Successful");
+           this.displayDialog = false;
+           this.isActive = false;
+           this.router.navigate(['list'])
+           .then(() => {
+             window.location.reload();
+           });
+         },
+         (err)=>{
+           console.log("Error");
+         }
+       );
+     }
+     else {
+       this.approvalRemarks = "Please enter Reason";
+     }
+     
+  }
+  
+
 }
+
