@@ -1,13 +1,19 @@
 {
+<<<<<<< HEAD
   "name": "employee-management",
   "version": "0.0.0",
+=======
+  "name": "foxteam-expense-management",
+  "version": "0.0.1",
+>>>>>>> 9a8af467bf71f2e93c72698ab9be1726909fb531
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "prod" : "ng build --prod"
   },
   "private": true,
   "dependencies": {
