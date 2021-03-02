@@ -1,4 +1,4 @@
-<div class="container py-5">
+<div class="content">
 <h3>Admin View of Expenses List</h3>
 <div>
     <p-tabView >
@@ -89,46 +89,60 @@
 
 
 <p-dialog header="Expense Details" [(visible)]="displayDialog" [responsive]="true" showEffect="fade" [modal]="true" [closable]="true" [style]="{'width':'600px'}">
-    <div class="ui-g ui-fluid" *ngIf="expenseDetails">
-        <div class="ui-g-4"><label for="EmpName">Employee Name: </label>
-            <label style="padding-left: 20px;" >{{employeeDetails.EmpName}} {{employeeDetails.LastName}}</label></div>
-
-        <div class="ui-g-4"><label for="EmpNo">Employee ID: </label>
-            <label style="padding-left: 20px;" >{{expenseDetails.EmployeeId}}</label></div>
-
-        <div class="ui-g-4"><label for="expenseType">Type of Expense: </label>
-            <label style="padding-left: 20px;" >{{expenseDetails.ExpenseId}}</label></div>
-
-        <div class="ui-g-4"><label for="date1">Expense Date: </label>
-            <label style="padding-left: 20px;" >{{expenseDetails.ExpenseDate}}</label></div>
-
-        <div class="ui-g-4"><label for="date2">Project Name: </label>
-            <label style="padding-left: 20px;" >{{expenseDetails.ProjectCode}}</label></div>
-
-        <div class="ui-g-4"><label for="project">SubProject Name: </label>
-            <label style="padding-left: 20px;" >{{expenseDetails.SubProjectId}}</label></div>
-
-        <div class="ui-g-4"><label for="amount">Total Expenses: </label>
-            <label style="padding-left: 20px;" id="expenseAmount" name="expenseAmount" >{{expenseDetails.AmountRequested}}</label></div>
-
-        <div class="ui-g-4"><label for="amount">Approved Expenses: </label>
-            <input pInputText type="number" [(ngModel)]="amountApproved" (keyup)="approvedExpense()" 
-            value="{{expenseDetails.AmountRequested}}"/>
+    <div class="ui-g ui-fluid" *ngIf="expenseDetails" style="padding:20px">
+        <div class="row">
+            <div class="col-sm-6 col-md-6 col-xs-12"> Employee Name: </div>
+            <div class="col-sm-6 col-md-6 col-xs-12"> {{employeeDetails.EmpName}} {{employeeDetails.LastName}}</div>
         </div>
 
-        <div class="ui-g-4" [ngClass]="isActive?'show':'noshow'" id="rejectReason"  style="padding-top: 20px;">
-            <label for="float-input">Reason </label>
-            <span class="p-float-label">
+        <div class="row">
+            <div class="col-sm-6 col-md-6 col-xs-12">Employee ID: </div>
+            <div class="col-sm-6 col-md-6 col-xs-12">{{expenseDetails.EmployeeId}}</div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6 col-md-6 col-xs-12">Type of Expense: </div>
+            <div class="col-sm-6 col-md-6 col-xs-12">{{expenseDetails.ExpenseId}}</div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6 col-md-6 col-xs-12">Expense Date: </div>
+            <div class="col-sm-6 col-md-6 col-xs-12">{{expenseDetails.ExpenseDate}}</div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6 col-md-6 col-xs-12">Project Name: </div>
+            <div class="col-sm-6 col-md-6 col-xs-12">{{expenseDetails.ProjectCode}}</div></div>
+
+        <div class="row">
+            <div class="col-sm-6 col-md-6 col-xs-12">SubProject Name: </div>
+            <div class="col-sm-6 col-md-6 col-xs-12">{{expenseDetails.SubProjectId}}</div></div>
+
+        <div class="row">
+            <div class="col-sm-6 col-md-6 col-xs-12">Total Expenses: </div>
+            <div class="col-sm-6 col-md-6 col-xs-12" id="expenseAmount" name="expenseAmount" >{{expenseDetails.AmountRequested}}</div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6 col-md-6 col-xs-12">Approved Expenses: </div>
+            <div class="col-sm-6 col-md-6 col-xs-12"><input pInputText type="number" [(ngModel)]="amountApproved" (keyup)="approvedExpense()" 
+            value="{{expenseDetails.AmountRequested}}"/></div>
+        </div>
+
+        <div class="row" [ngClass]="isActive?'show':'noshow'" id="rejectReason" >
+            <div class="col-sm-6 col-md-6 col-xs-12">Reason </div>
+            <div class="col-sm-6 col-md-6 col-xs-12">
                 <textarea rows="4" cols="40" [(ngModel)]="approvalRemarks" ></textarea>                
-            </span>
-           <label class="float-right"> <a style="cursor: pointer;" (click)="rejectExpenseWithReason()" >Reject </a></label>
+            </div>
+           <label style="padding-left: 20px; float: right;" [ngClass]="isRejectActive?'show':'noshow'"> <a style="cursor: pointer;" (click)="rejectExpenseWithReason()" >Reject </a></label>
         </div>
 
 
-        <div class="ui-g-4" ><label for="amount">Reciept: </label>
-                <label style="padding-left: 20px;" >
+        <div class="row" >
+            <div class="col-sm-6 col-md-6 col-xs-12">Reciept: </div>
+            <div class="col-sm-6 col-md-6 col-xs-12">
                     <img src="assets/images/Receipt.jpg" alt="Receipt" (click)="viewFullImage()" style="width:50px; height: 50px;">
-                </label>
+            </div>
         </div>
 
     </div>

@@ -11,7 +11,7 @@ export class ApiService {
 
   readonly BaseUrl = (<HTMLInputElement>document.getElementById('BaseUrl')).value;
   readonly CompanyId = (<HTMLInputElement>document.getElementById('CompanyId')).value;
-  readonly UserId = (<HTMLInputElement>document.getElementById('UserId')).value;
+  readonly EmployeeId = (<HTMLInputElement>document.getElementById('EmployeeId')).value;
  
 
   httpHeaders = new HttpHeaders({'Content-type':'application/json'});

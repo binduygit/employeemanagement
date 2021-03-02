@@ -5,3 +5,11 @@
 .noshow{
     display:none;
 }
+
+label{
+    font-weight:500;
+}
+
+.row{
+    margin-top:10px;
+}

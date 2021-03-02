@@ -9,6 +9,8 @@ import {ExpenseService} from '.././remoteDB/expense.service';
 import {EmployeeExpenses} from '.././remoteDB/employee-expenses.model';
 import { DatePipe } from '@angular/common';
 
+declare const foxTeam:any;
+
 @Component({
   selector: 'app-form-list',
   templateUrl: './form-list.component.html',
@@ -27,6 +29,7 @@ export class FormListComponent implements OnInit,OnChanges {
   displayImageDialog: boolean = false;
   displayReason: boolean = false; 
   isActive: boolean = false;
+  isRejectActive:boolean = false;
   reason:String;
   validReason:String;
   allExpenseList:EmployeeExpenses[];
@@ -50,7 +53,7 @@ export class FormListComponent implements OnInit,OnChanges {
           this.allExpenseList = this.expenseService.expenses;        
         }, 
         error => {
-          console.log(error);
+          console.log(JSON.stringify(error));
         }
       )
       
@@ -61,7 +64,7 @@ export class FormListComponent implements OnInit,OnChanges {
 
   onSelectExpense(event) {    
     //this.expenseDetails = {...event.data};  
-      
+    var FoxTeam = new foxTeam();
     this.displayDialog = true;
     this.expenseService.getSelectedExpense(event).subscribe(res => {
       this.expenseDetails = res as EmployeeExpenses[];
@@ -71,14 +74,13 @@ export class FormListComponent implements OnInit,OnChanges {
     },
     ()=>{
       this.amountApproved = this.expenseDetails['AmountRequested'];
-      this.api.getEmploy(this.expenseDetails['EmployeeId']).subscribe(
-        (data) => {
-          this.employeeDetails = data;
-        },
-        (err) => {
-          console.log(err);
-        }
-      );
+      
+      FoxTeam.Ready(async () => {
+      FoxTeam.RefreshValues();
+      FoxTeam.WhoAmI();
+      this.employeeDetails = await FoxTeam.GetEmployeeInfo(this.expenseDetails['EmployeeId'], false);
+    }); 
+      
     }
     
     );
@@ -95,6 +97,7 @@ export class FormListComponent implements OnInit,OnChanges {
       var approvalStatus = 'PartiallyApproved';
     }
     else{
+      
       var approvalStatus = 'Approved';
     }
     var updatedExpenses = {
@@ -111,24 +114,24 @@ export class FormListComponent implements OnInit,OnChanges {
     }
     this.expenseService.updateExpenses(updatedExpenses).subscribe(
       (res)=>{
-        console.log("Successful");
         this.displayDialog = false;
         this.router.navigate(['list'])
         .then(() => {
-          window.location.reload();
+          this.getAllExpenses();
         });
       },
       (err)=>{
         console.log("Error");
       }
     );
-      
+
 
   }
   rejectExpense() {
     
     this.approvalRemarks = '';
     this.isActive = true;
+    this.isRejectActive = true;
     
   }
   approvedExpense(){
@@ -142,11 +145,9 @@ export class FormListComponent implements OnInit,OnChanges {
   }
 
   rejectExpenseWithReason() {
-  
     
     var userId = (<HTMLInputElement>document.getElementById('UserId')).value;
     var approvedDate = this.datepipe.transform(new Date, 'dd/MM/yyyy');
-    console.log(this.approvalRemarks);
     
     if(this.approvalRemarks !=""){
        var rejectedExpense = {
@@ -167,7 +168,7 @@ export class FormListComponent implements OnInit,OnChanges {
            this.isActive = false;
            this.router.navigate(['list'])
            .then(() => {
-             window.location.reload();
+            this.getAllExpenses();
            });
          },
          (err)=>{

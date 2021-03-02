@@ -1,19 +1,16 @@
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';    
 import { PrimeNGConfig } from 'primeng/api';
 import { OutputCaptureComponent } from '../output-capture/output-capture.component';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ApiService } from '.././api.service';
 import {ExpenseService} from '.././remoteDB/expense.service';
 import { DatePipe } from '@angular/common';
+import {NgForm} from '@angular/forms';
 
-
+declare const foxTeam:any;
 interface Expenses {
   name: string, 
   key: string
 }
-
-
-
 
 @Component({
   selector: 'app-forms',
@@ -22,76 +19,45 @@ interface Expenses {
   providers:[DatePipe]
 })
 export class FormsComponent implements OnInit, AfterViewInit { 
-  date1: Date | undefined;
-  date2: Date |  undefined;
+  @ViewChild('f') expenseForm: NgForm;
+  
   expenseType?: Expenses[];
-  selectProject?:[];
-  selectExpenseType?:String;
-  expLocation?: String;
-  allProjectList=[];
-  expensesValue?:number;
-  expensesTax?:number;
-  projectName?: string;
-  selectAssignment?:[];
- 
-  projects:Array<string> = [];
+  allProjectList?:any;
   subProjectList = [];
-  userId?:String;
   employeeInfo?:Array<string> = [];
   isActive?:boolean = false;
-  selectSubProject?:[];
+  BranchId?:String;
+  CompanyId?:String;
+  BaseUrl?: String;
+  EmployeeId?:any;
 
   @ViewChild(OutputCaptureComponent, {static: true}) outputCapture:OutputCaptureComponent;
-  constructor(private api: ApiService, private primengConfig: PrimeNGConfig, private datepipe: DatePipe, private router: Router, private route:ActivatedRoute, private expenseService:ExpenseService) { 
-    this.userId = (<HTMLInputElement>document.getElementById('UserId')).value;
-    this.getEmployeeInfo()
-  }
-
-  getEmployeeInfo = ()=>{
-    this.api.getEmploy(this.userId).subscribe(
-      data =>{
-        this.employeeInfo = data;
-      },
-      error => {
-        console.log(error);
-      }
-    )
-  }
-  
-  getProjects = ()=>{
-    this.api.getProjectList().subscribe(
-      data => {
-        this.allProjectList = data;
-      },
-      error => {
-        this.allProjectList = [];
-      }
-      
-    )
-      
+  constructor( private primengConfig: PrimeNGConfig, private datepipe: DatePipe, private router: Router, private route:ActivatedRoute, private expenseService:ExpenseService) { 
+    
+    this.CompanyId = (<HTMLInputElement>document.getElementById('CompanyId')).value;
+    this.BaseUrl = (<HTMLInputElement>document.getElementById('BaseUrl')).value;
+    this.BranchId = (<HTMLInputElement>document.getElementById('BranchId')).value;
+    this.EmployeeId = (<HTMLInputElement>document.getElementById('EmployeeId')).value;
   }
 
   subProjects(){
-    var code = this.selectAssignment['ProjectCode'];
-    if(code){
-      this.api.getSubProjectList(code).subscribe(
-        data => {
-          this.subProjectList= data;
-          if(data.length){
+    console.log("Not implemented yet" + this.expenseForm.value.expenseData.selectAssignment);
+    var FoxTeam = new foxTeam;
+      if(this.expenseForm.value.expenseData.selectAssignment){
+      let code = this.expenseForm.value.expenseData.selectAssignment['ProjectCode'];
+      if(code){
+        FoxTeam.Ready(async () => {
+          FoxTeam.RefreshValues();
+          FoxTeam.WhoAmI();
+          this.subProjectList = await FoxTeam.GetSubProjects(code, false);
+          if(this.subProjectList.length){
             this.isActive = true;
           } 
           else{
           this.isActive = false;
           }
-        },
-        error => {
-          this.isActive = false;
-          this.subProjectList = [];
-        },
-        () => {
-          //console.log(this.subProjectList);
-        }
-      )
+        });
+      }
     }
   }
 
@@ -106,17 +72,17 @@ export class FormsComponent implements OnInit, AfterViewInit {
     return this;
   }
 
-  addExpenses(){
-    var userId = (<HTMLInputElement>document.getElementById('UserId')).value;
-    var companyId = (<HTMLInputElement>document.getElementById('CompanyId')).value;
-    var totalExpenses = this.expensesValue + this.expensesTax;
-    var expenseDate = this.datepipe.transform(this.date1, 'dd/MM/yyyy');
+  onSubmit(){
+    console.log("form viewChild",this.expenseForm.value.expenseData);
+    
+    var totalExpenses = this.expenseForm.value.expenseData.expensesValue + this.expenseForm.value.expenseData.expensesTax;
+    var expenseDate = this.datepipe.transform(this.expenseForm.value.expenseData.expenseDate, 'dd/MM/yyyy');
     var addExpenseValues = {
-      EmployeeId: userId,
-      CompanyId: companyId,
-      ExpenseId: this.selectExpenseType['name'],
-      ProjectCode: this.selectAssignment['ProjectTitle'],
-      SubProjectId: this.selectSubProject['SubProjectTitle'],
+      EmployeeId: this.EmployeeId,
+      CompanyId: this.CompanyId,
+      ExpenseId: this.expenseForm.value.expenseData.selectExpenseType['name'],
+      ProjectCode: this.expenseForm.value.expenseData.selectAssignment['ProjectTitle'],
+      SubProjectId: this.expenseForm.value.expenseData.selectSubProject['SubProjectTitle'],
       ExpenseDate: expenseDate,
       AmountRequested: totalExpenses,
       AmountApproved: 0,
@@ -130,7 +96,6 @@ export class FormsComponent implements OnInit, AfterViewInit {
       PaymentDate:null,
       ApprovalRemarks:''
     }
-    console.log(addExpenseValues);
     this.expenseService.postExpense(addExpenseValues).subscribe(
       (res)=>{
         console.log("Successful");
@@ -140,10 +105,14 @@ export class FormsComponent implements OnInit, AfterViewInit {
     
   }
 
-
   ngOnInit(): void {
-
-    this.getProjects();
+     var FoxTeam = new foxTeam;
+     FoxTeam.Ready(async() => {
+        FoxTeam.RefreshValues();
+        FoxTeam.WhoAmI();
+        this.employeeInfo = await FoxTeam.GetEmployeeInfo(this.EmployeeId, false);
+        this.allProjectList = await FoxTeam.GetProjects(false);
+      }); 
 
     this.expenseType = [
         {name: 'Food/Breverages', key:'FB'},

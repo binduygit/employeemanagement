@@ -1,17 +1,9 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <h2 style="color:white">Expense Management Module</h2>>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      
-      <ul class="nav navbar-nav ml-auto">
-        <li class="nav-item ">
-          <a class="nav-link" routerLink="/" ><i class="fa fa-edit"></i>Add Expenses </a>
-        </li>
-        <li class="nav-item" *ngIf="financialEmployee['IsfinancialCtrl'] === true">
-          <a class="nav-link" routerLink="/list">Admin View</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" [routerLink]="['/view']">Personal View</a>
-          </li>
-      </ul>
-    </div>
-  </nav>
+
+    <div class="content-section implementation" style="padding-left: 20px;">
+      <h1>Expense Management Module</h1>
+      <div class="card">
+          <p-menubar [model]="items">
+              
+          </p-menubar>
+      </div>
+  

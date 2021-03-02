@@ -13,12 +13,12 @@ import {EmployeeExpenses} from '.././remoteDB/employee-expenses.model';
 export class ListComponent implements OnInit, OnChanges {
 
 
-  userId?:String;
+  userId?:any;
   personalExpenseList:EmployeeExpenses[];
 
   constructor(private api: ApiService, private expenseService: ExpenseService) {
     
-    this.userId = (<HTMLInputElement>document.getElementById('UserId')).value;
+    this.userId = (<HTMLInputElement>document.getElementById('EmployeeId')).value;
     this.getAllExpenses();
 
    }

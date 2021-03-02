@@ -1,13 +1,11 @@
 import { BrowserModule } from '@angular/platform-browser';
 import {CommonModule} from '@angular/common';
-import { NgModule } from '@angular/core';
+import { NgModule, enableProdMode } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import { Routes, RouterModule } from '@angular/router';
-
+import { PathLocationStrategy, LocationStrategy } from '@angular/common';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { from } from 'rxjs';
 import { FormsComponent } from './forms/forms.component';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
@@ -27,14 +25,11 @@ import {DataViewModule} from 'primeng/dataview';
 import {ContextMenuModule} from 'primeng/contextmenu';
 import { CascadeSelectModule } from 'primeng/cascadeselect';
 import {TabViewModule} from 'primeng/tabview';
-import { InputTextareaModule } from 'primeng/inputtextarea';
+import { InputTextareaModule } from 'primeng/inputtextarea';  
+import {AuthGuardService} from './auth-guard.service';
+import {AuthService} from './auth.service';
+import {MenubarModule} from 'primeng/menubar';
 
-
-const appRoutes: Routes = [
-  {path:'', component: FormsComponent},
-  {path:'list',component: FormListComponent},
-  {path:'view',component:ListComponent}
-];
 
 
 @NgModule({
@@ -67,11 +62,11 @@ const appRoutes: Routes = [
     CascadeSelectModule,
     TabViewModule,
     InputTextareaModule,
-    RouterModule.forRoot(appRoutes,{enableTracing:true})
+    MenubarModule
   ],
-  providers: [],
+  providers: [AuthService,AuthGuardService,{provide: LocationStrategy, useClass: PathLocationStrategy}],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
 
-
+enableProdMode();

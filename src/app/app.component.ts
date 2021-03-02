@@ -9,10 +9,15 @@ import { ApiService } from './api.service';
 })
 export class AppComponent {
 
-  constructor(private primengConfig: PrimeNGConfig) {}
+ 
+
+  constructor(private primengConfig: PrimeNGConfig, private api: ApiService) {
+
+  }
   
   ngOnInit() {
     this.primengConfig.ripple = true;
+    
   }
 
 

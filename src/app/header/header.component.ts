@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '.././api.service';
+import {MenuItem} from 'primeng/api';
+
+declare const foxTeam:any;
 
 @Component({
   selector: 'app-header',
@@ -8,30 +11,64 @@ import { ApiService } from '.././api.service';
 })
 export class HeaderComponent implements OnInit {
 
-
-  empID?:String;
+  items: MenuItem[];
+  empID?:any;
   financialEmployee?:Array<string> = [];
 
   constructor(private api:ApiService) {
-    this.empID = (<HTMLInputElement>document.getElementById('UserId')).value;
-    this.getEmployeeInfo();
+    this.empID = (<HTMLInputElement>document.getElementById('EmployeeId')).value;
+    var FoxTeam = new foxTeam;
+   FoxTeam.Ready(async () => {
+      FoxTeam.RefreshValues();
+      FoxTeam.WhoAmI();
+
+      this.financialEmployee = await FoxTeam.GetEmployeeInfo(this.empID, false);
+      console.log(this.financialEmployee);
+      this.addItems();
+    });
+  
+   
    }
 
-  getEmployeeInfo = ()=>{
-    this.api.getEmploy(this.empID).subscribe(
-      data =>{
-        this.financialEmployee = data;
-      },
-      error => {
-        console.log(error);
-      }
-      
-    )
-
-    
+   addItems = () => {
+    console.log("Is Financial Controller"+this.financialEmployee['IsfinancialCtrl']);
+    if(this.financialEmployee['IsfinancialCtrl']===true){
+      this.items = [
+        {
+          label:'Add Expenses',
+          icon:'pi pi-fw pi-pencil',
+          routerLink: '/'
+          
+        },          
+        {
+          label:'Admin View',
+          icon:'pi pi-fw pi-book',
+          routerLink: '/list'
+        },
+        {
+          label:'Expenses List',
+          icon:'pi pi-fw pi-book',
+          routerLink: '/view'
+        }
+      ];
+    } else {
+      this.items = [
+        {
+          label:'Add Expenses',
+          icon:'pi pi-fw pi-pencil',
+          routerLink: '/'
+          
+        },
+        {
+          label:'Expenses List',
+          icon:'pi pi-fw pi-book',
+          routerLink: '/view'
+        }
+      ];
+    }
   }
 
-  ngOnInit(): void {
+  ngOnInit() {
+   
   }
-
 }
