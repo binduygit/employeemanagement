@@ -18,10 +18,7 @@
                     <div class="input-group-prepend"> 
                         <p-dropdown [options]="expenseType" ngModel name="selectExpenseType" optionLabel="name" placeholder="Select Expense" required selectExpenseType #selectExpenseType="ngModel"></p-dropdown> 
                     </div>
-                    <div *ngIf="!expenseType.valid && expenseType.touched"
-                        style="text-align: left;font-size:0.8rem;color:red;padding:20px">
-                        Select Expense Type
-                    </div>  
+                      
                   </div>  
                 </div>  
               </div>
