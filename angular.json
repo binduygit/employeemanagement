@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "djangoAngular": {
+    "expenseManagement": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:application": {
@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/djangoAngular",
+            "outputPath": "dist/expenseManagement",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -71,18 +71,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "djangoAngular:build"
+            "browserTarget": "expenseManagement:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "djangoAngular:build:production"
+              "browserTarget": "expenseManagement:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "djangoAngular:build"
+            "browserTarget": "expenseManagement:build"
           }
         },
         "test": {
@@ -119,18 +119,18 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "djangoAngular:serve"
+            "devServerTarget": "expenseManagement:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "djangoAngular:serve:production"
+              "devServerTarget": "expenseManagement:serve:production"
             }
           }
         }
       }
     }
   },
-  "defaultProject": "djangoAngular",
+  "defaultProject": "expenseManagement",
   "cli": {
     "analytics": "c09e4345-8c0d-4e4a-92ee-d609ffdba7df"
   }
