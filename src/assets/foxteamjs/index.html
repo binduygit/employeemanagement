@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FoxTeam.js Demos</title>
+    <script src="./dist/foxteam.js"></script>
+
+    <link rel="stylesheet" href="./style.css" />
+    <input type="hidden" name="CompanyId" id="CompanyId" value="1" />
+    <input type="hidden" name="BranchId" id="BranchId" value="2" />
+    <input type="hidden" name="EmployeeId" id="EmployeeId" value="19" />
+    <input
+      type="hidden"
+      name="BaseUrl"
+      id="BaseUrl"
+      value="https://api.foxteam.in\api\"
+    />
+
+    <!-- <input
+      type="hidden"
+      name="BaseUrl"
+      id="BaseUrl"
+      value="https://localhost:44318/api/"
+    /> -->
+
+    <!-- value="https://api.foxteam.in\api\" -->
+  </head>
+  <body>
+    <div id="background">
+      <div id="console">
+        <p id="consoletext">FoxTeam Console Ready ... <br /></p>
+        <textarea rows="1" id="textinput" onkeydown="checkInput();"></textarea>
+      </div>
+    </div>
+
+    <script>
+      function checkInput() {
+        var event = window.event || event.which;
+
+        if (event.keyCode == 13) {
+          event.preventDefault();
+          addLine(document.getElementById("textinput").value);
+          document.getElementById("textinput").value = "";
+        }
+
+        document.getElementById("textinput").style.height =
+          document.getElementById("textinput").scrollHeight + "px";
+      }
+
+      async function Delay(msg, interval = 5000) {
+        return new Promise((resolve, reject) => {
+          document.getElementById("consoletext").innerHTML =
+            `<h1>${msg}</h1> <hr> ` +
+            document.getElementById("consoletext").innerHTML;
+          setTimeout(() => {
+            document.getElementById("consoletext").innerHTML = "";
+            resolve();
+          }, interval);
+        });
+      }
+      function Preety(line) {
+        return JSON.stringify(line, null, 4) + "\n";
+      }
+
+      async function Log(line) {
+        console.log(line);
+        if (typeof line === "object") line = Preety(line);
+        setTimeout(() => {
+          var textNode = document.createTextNode(line);
+          var br = document.createElement("br");
+          document.getElementById("consoletext").appendChild(textNode);
+          document.getElementById("consoletext").appendChild(br);
+        }, 200);
+      }
+
+      FoxTeam.Ready(async () => {
+        //FoxTeam.setMode("development");
+        Log(`Mode set to ${FoxTeam.mode}`);
+        Log(FoxTeam.WhoAmI());
+        //FoxTeam.clearCache();
+
+        Log(await FoxTeam.GetEmployeeInfo());
+        await Delay("Get One Employee Info");
+
+        Log(await FoxTeam.GetXEmployees());
+        await Delay("X Employee list");
+
+        let projects = await FoxTeam.GetProjects();
+        Log(projects);
+        await Delay("Projects List");
+
+        Log(await FoxTeam.GetSubProjects(6));
+        await Delay("Sub Projects List");
+
+        Log(await FoxTeam.GetFinalcialControllers());
+        await Delay("Financial controllers List");
+
+        Log(await FoxTeam.GetActiveEmployees());
+        await Delay("Active Employee List");
+
+        Log(await FoxTeam.GetAllEmployees());
+        await Delay("All Employee List");
+      });
+    </script>
+  </body>
+</html>

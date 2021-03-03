@@ -1,3 +1,5 @@
 [submodule "src\\assets\\foxteamjs"]
 	path = src\\assets\\foxteamjs
 	url = https://bitbucket.org/binduyenugu/employeemanagement/src/master/src/assets/
+[submodule "https://bitbucket.org/binduyenugu/employeemanagement/src/mainbranch/src/assets/"]
+	url = foxteamjs\\
