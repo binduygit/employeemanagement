@@ -17,7 +17,7 @@ export class HeaderComponent implements OnInit {
 
   constructor(private api:ApiService) {
     this.empID = (<HTMLInputElement>document.getElementById('EmployeeId')).value;
-    var FoxTeam = new foxTeam;
+  /*  var FoxTeam = new foxTeam;
    FoxTeam.Ready(async () => {
       FoxTeam.RefreshValues();
       FoxTeam.WhoAmI();
@@ -26,7 +26,7 @@ export class HeaderComponent implements OnInit {
       console.log(this.financialEmployee);
       this.addItems();
     });
-  
+  */
    
    }
 
@@ -69,6 +69,23 @@ export class HeaderComponent implements OnInit {
   }
 
   ngOnInit() {
-   
+    this.items = [
+      {
+        label:'Add Expenses',
+        icon:'pi pi-fw pi-pencil',
+        routerLink: '/'
+        
+      },          
+      {
+        label:'Admin View',
+        icon:'pi pi-fw pi-book',
+        routerLink: '/list'
+      },
+      {
+        label:'Expenses List',
+        icon:'pi pi-fw pi-book',
+        routerLink: '/view'
+      }
+    ];
   }
 }

@@ -7,7 +7,7 @@ import {AuthGuardService} from './auth-guard.service';
 
 const appRoutes: Routes = [
     {path:'', component: FormsComponent},
-    {path:'list',canActivate:[AuthGuardService],component: FormListComponent},
+    {path:'list',component: FormListComponent},
     {path:'view',component:ListComponent}
   ];
 

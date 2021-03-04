@@ -110,7 +110,7 @@ export class FormsComponent implements OnInit, AfterViewInit {
      FoxTeam.Ready(async() => {
         FoxTeam.RefreshValues();
         FoxTeam.WhoAmI();
-        this.employeeInfo = await FoxTeam.GetEmployeeInfo(this.EmployeeId, false);
+        //this.employeeInfo = await FoxTeam.GetEmployeeInfo(this.EmployeeId, false);
         this.allProjectList = await FoxTeam.GetProjects(false);
       }); 
 
